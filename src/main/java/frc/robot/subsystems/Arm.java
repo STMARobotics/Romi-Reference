@@ -11,22 +11,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Arm extends SubsystemBase {
 
     // Constants for min-max arm movments
-    public static final double LIFT_MIN = 0;
-    public static final double LIFT_MAX = 180;
-    public static final double TILT_MIN = 0;
-    public static final double TILT_MAX = 180;
-    public static final double GRIPPER_MIN = 0;
-    public static final double GRIPPER_MAX = 180;
+    public static final double LIFT_MIN = 10;
+    public static final double LIFT_MAX = 90;
+    public static final double TILT_MIN = 90;
+    public static final double TILT_MAX = 145;
+    public static final double GRIPPER_MIN = 10;
+    public static final double GRIPPER_MAX = 170;
 
     // Servos that move the arm
-    private final Servo lift = new Servo(2);
-    private final Servo tilt = new Servo(3);
-    private final Servo gripper = new Servo(4);
+    private final Servo gripper = new Servo(2);
+    private final Servo lift = new Servo(3);
+    private final Servo tilt = new Servo(4);
 
     // Current requested positions for the servos
-    private double liftAngle = 0;
-    private double tiltAngle = 0;
-    private double gripperAngle = 0;
+    private double liftAngle = LIFT_MAX;
+    private double tiltAngle = TILT_MAX;
+    private double gripperAngle = GRIPPER_MIN;
 
     @Override
     public void periodic() {
@@ -34,87 +34,79 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("Lift Angle", liftAngle);
         SmartDashboard.putNumber("Tilt Angle", tiltAngle);
         SmartDashboard.putNumber("Gripper Angle", gripperAngle);
+
+        setLift(liftAngle);
+        setTilt(tiltAngle);
+        setGripper(gripperAngle);
     }
 
     /**
      * Raise the lift by 1-degree
-     * @return new lift angle
      */
-    public double raiseLift() {
-        return setLift(liftAngle + 1);
+    public void raiseLift() {
+        liftAngle--;
     }
 
     /**
      * Lower the lift by 1-degree
-     * @return new lift angle
      */
-    public double lowerLift() {
-        return setLift(liftAngle - 1);
+    public void lowerLift() {
+        liftAngle++;
     }
 
     /**
      * Set the lift angle. Should be a value between {@link #LIFT_MIN} and {@link #LIFT_MAX}.
      * @param angle angle to set
-     * @return new lift angle
      */
-    public double setLift(double angle) {
+    public void setLift(double angle) {
         liftAngle = MathUtil.clamp(angle, LIFT_MIN, LIFT_MAX);
         lift.setAngle(liftAngle);
-        return liftAngle;
     }
 
     /**
      * Tilt the lift forward 1-degree
-     * @return new tilt angle
      */
-    public double tiltForward() {
-        return setTilt(tiltAngle + 1);
+    public void tiltUp() {
+        tiltAngle ++;
     }
 
     /**
      * Tilt the lift backward 1-degree
-     * @return new tilt angle
      */
-    public double tiltBackward() {
-        return setTilt(tiltAngle - 1);
+    public void tiltDown() {
+        tiltAngle--;
     }
 
     /**
      * Set the lift tilt angle. Should be a value between {@link #TILT_MIN} and {@link #TILT_MAX}
      * @param angle angle to set
-     * @return new tilt angle
      */
-    public double setTilt(double angle) {
+    public void setTilt(double angle) {
         tiltAngle = MathUtil.clamp(angle, TILT_MIN, TILT_MAX);
         tilt.setAngle(tiltAngle);
-        return tiltAngle;
     }
 
     /**
      * Open the gripper 1-degree
-     * @return new gripper angle
      */
-    public double openGripper() {
-        return setGripper(gripperAngle + 1);
+    public void openGripper() {
+        gripperAngle--;
     }
 
     /** 
      * Close the gripper 1-degree
-     * @return new gripper angle
      */
-    public double closeGripper() {
-        return setGripper(gripperAngle - 1);
+    public void closeGripper() {
+        gripperAngle++;
     }
 
     /**
      * Set the gripper angle. Should be a value between {@link #GRIPPER_MIN} and {@link #GRIPPER_MAX}
      * @param angle
-     * @return
      */
-    public double setGripper(double angle) {
+    public void setGripper(double angle) {
         gripperAngle = MathUtil.clamp(angle, GRIPPER_MIN, GRIPPER_MAX);
         gripper.setAngle(gripperAngle);
-        return gripperAngle;
     }
 
 }

@@ -16,6 +16,16 @@ public class TeleopArm extends CommandBase {
     }
 
     @Override
+    public void initialize() {
+        // Move the servos one notch so they will move.
+        // If commanded to a position while the robot is disabled, they don't move to that position on enable.
+        //The position needs to be changed.
+        arm.raiseLift();
+        arm.tiltDown();
+        arm.closeGripper();
+    }
+
+    @Override
     public void execute() {
         // Move lift with X and Y
         if (controller.getYButton()) {
@@ -26,9 +36,9 @@ public class TeleopArm extends CommandBase {
 
         // Move tilt with bumpers
         if (controller.getRightBumper()) {
-            arm.tiltForward();
+            arm.tiltUp();
         } else if (controller.getLeftBumper()) {
-            arm.tiltBackward();
+            arm.tiltDown();
         }
 
         // Move gripper with A and B
